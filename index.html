@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexa Studios | nexa.lawsonmorris.co.uk</title>
+    <!-- Tailwind CSS for utility-first styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --accent-primary: #00f2ff;
+            --accent-secondary: #7000ff;
+            --bg-dark: #050505;
+            --card-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at 50% 50%, rgba(112, 0, 255, 0.12) 0%, rgba(0, 242, 255, 0.03) 50%, rgba(5, 5, 5, 1) 100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .glass {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass:hover {
+            border-color: rgba(0, 242, 255, 0.3);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .animate-fade-up {
+            animation: fadeInUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .btn-glow {
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-glow:hover {
+            box-shadow: 0 0 35px rgba(0, 242, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .nav-link {
+            position: relative;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+            z-index: 1000;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        .section-hidden {
+            display: none !important;
+        }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .timeline-dot {
+            position: relative;
+        }
+        .timeline-dot::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-primary), var(--accent-secondary));
+            left: 50%;
+            top: 40px;
+            z-index: -1;
+        }
+
+        .badge-free {
+            background: linear-gradient(90deg, #00f2ff, #7000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .tech-chip {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+        .tech-chip:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            background: rgba(0, 242, 255, 0.05);
+        }
+
+        .coming-soon-card {
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(0, 0, 0, 0),
+                rgba(0, 0, 0, 0) 10px,
+                rgba(255, 255, 255, 0.02) 10px,
+                rgba(255, 255, 255, 0.02) 20px
+            );
+        }
+
+        .project-image-hover {
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .glass:hover .project-image-hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particles-canvas"></canvas>
+    <div id="scroll-progress"></div>
+    <div class="hero-gradient"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 py-6 px-8 flex justify-between items-center bg-transparent backdrop-blur-lg border-b border-white/5 transition-all duration-500" id="main-nav">
+        <div class="nav-logo text-2xl font-bold tracking-tighter cursor-pointer flex items-center gap-2" onclick="navigateTo('home')">
+            <div class="w-8 h-8 rounded bg-gradient-to-br from-[#00f2ff] to-[#7000ff] flex items-center justify-center">
+                <span class="text-black text-xs font-black">N</span>
+            </div>
+            <span>NEXA<span class="text-[#00f2ff]">STUDIOS</span></span>
+        </div>
+        <div class="hidden md:flex gap-10 items-center">
+            <span onclick="navigateTo('home')" class="nav-link text-sm uppercase tracking-widest font-medium opacity-80 hover:opacity-100">Home</span>
+            <span onclick="navigateTo('about')" class="nav-link text-sm uppercase tracking-widest font-medium opacity-80 hover:opacity-100">The Deal</span>
+            <span onclick="navigateTo('skills')" class="nav-link text-sm uppercase tracking-widest font-medium opacity-80 hover:opacity-100">Our Tech</span>
+            <span onclick="navigateTo('submit')" class="nav-link text-sm uppercase tracking-widest font-medium opacity-80 hover:opacity-100">Submit Idea</span>
+            <span onclick="navigateTo('contact')" class="px-5 py-2 glass text-sm uppercase tracking-widest font-medium hover:bg-[#00f2ff] hover:text-black hover:border-transparent transition-all duration-300 cursor-pointer">Contact</span>
+        </div>
+        <div class="md:hidden cursor-pointer p-2" id="mobile-menu-btn">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Overlay -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-black/98 z-[100] flex flex-col items-center justify-center gap-10 text-3xl font-bold section-hidden">
+        <div class="absolute top-8 right-8 cursor-pointer p-4" id="mobile-close-btn">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </div>
+        <span onclick="navigateTo('home')" class="hover:text-[#00f2ff] cursor-pointer transition-colors">Home</span>
+        <span onclick="navigateTo('about')" class="hover:text-[#00f2ff] cursor-pointer transition-colors">The Deal</span>
+        <span onclick="navigateTo('skills')" class="hover:text-[#00f2ff] cursor-pointer transition-colors">Our Tech</span>
+        <span onclick="navigateTo('submit')" class="hover:text-[#00f2ff] cursor-pointer transition-colors">Submit Idea</span>
+        <span onclick="navigateTo('contact')" class="hover:text-[#00f2ff] cursor-pointer transition-colors">Contact</span>
+    </div>
+
+    <!-- Content Wrapper -->
+    <main class="relative z-10">
+        
+        <!-- Home Section -->
+        <section id="home-section" class="flex flex-col">
+            <!-- Hero -->
+            <div class="min-h-screen flex flex-col justify-center items-center px-6 text-center pt-20">
+                <div class="max-w-4xl animate-fade-up">
+                    <div class="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full mb-8 backdrop-blur-sm">
+                        <span class="text-[#00f2ff] text-[10px] font-black tracking-[0.2em] uppercase">Status: Building for the Community</span>
+                        <div class="h-1 w-1 rounded-full bg-[#00f2ff] animate-ping"></div>
+                    </div>
+                    
+                    <h1 class="text-6xl md:text-9xl font-extrabold mb-8 leading-[0.9] tracking-tight">
+                        Dream it. <br/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#00f2ff] via-[#7000ff] to-[#00f2ff] bg-[length:200%_auto] animate-gradient-x">I'll code it.</span>
+                    </h1>
+                    
+                    <p class="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed font-light">
+                        Building a portfolio by helping the community. <span class="text-white font-medium">I'm a teen developer turning your ideas into live apps for free.</span>
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <button onclick="navigateTo('submit')" class="btn-glow bg-gradient-to-r from-[#00f2ff] to-[#00d8e6] text-black font-extrabold py-5 px-10 rounded-full text-lg w-full sm:w-auto">
+                            Submit Idea
+                        </button>
+                        <button onclick="navigateTo('about')" class="glass py-5 px-10 rounded-full font-bold hover:bg-white/10 transition-all text-lg w-full sm:w-auto border-[#7000ff]/30 text-[#7000ff]">
+                            My Mission
+                        </button>
+                        <button onclick="navigateTo('skills')" class="glass py-5 px-10 rounded-full font-bold hover:bg-white/10 transition-all text-lg w-full sm:w-auto">
+                            The Tech
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tech Ticker -->
+            <div class="py-16 px-6 border-y border-white/5 bg-black/40">
+                <div class="max-w-6xl mx-auto flex flex-wrap justify-center gap-4 reveal-on-scroll">
+                    <div class="tech-chip">React & Next.js</div>
+                    <div class="tech-chip">Cloud Architecture</div>
+                    <div class="tech-chip">UI/UX Design</div>
+                    <div class="tech-chip">Real-time Data</div>
+                    <div class="tech-chip">AI Integration</div>
+                    <div class="tech-chip">API Development</div>
+                    <div class="tech-chip">Mobile Responsive</div>
+                </div>
+            </div>
+
+            <!-- Projects Section -->
+            <div class="py-32 px-6">
+                <div class="max-w-6xl mx-auto">
+                    <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                        <div class="reveal-on-scroll">
+                            <h2 class="text-4xl md:text-6xl font-bold mb-4">Portfolio <span class="text-[#00f2ff]">Growth</span></h2>
+                            <p class="text-gray-400 max-w-md">Real-world applications built by Nexa Studios for the community.</p>
+                        </div>
+                        <div class="reveal-on-scroll delay-100">
+                            <span class="px-6 py-2 border border-white/10 rounded-full text-xs font-bold uppercase tracking-widest text-gray-500">Phase 01: Active Projects</span>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Featured Project: FlightFeed.uk -->
+                        <div class="glass overflow-hidden group relative reveal-on-scroll">
+                            <div class="h-64 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] relative overflow-hidden flex items-center justify-center">
+                                <!-- Abstract UI Decoration -->
+                                <div class="absolute inset-0 opacity-10 flex items-center justify-center scale-150">
+                                    <i data-lucide="plane" class="w-64 h-64 text-[#00f2ff]"></i>
+                                </div>
+                                <div class="z-10 text-center project-image-hover">
+                                    <h4 class="text-4xl font-black italic tracking-tighter">FLIGHT<span class="text-[#00f2ff]">FEED</span></h4>
+                                    <p class="text-[10px] uppercase tracking-[0.4em] opacity-50 mt-2">Aviation Discovery Engine</p>
+                                </div>
+                                <!-- Location Badge -->
+                                <div class="absolute top-4 right-4 bg-[#00f2ff]/20 text-[#00f2ff] px-3 py-1 rounded-full text-[10px] font-bold backdrop-blur-md border border-[#00f2ff]/30">
+                                    Cardiff Based
+                                </div>
+                            </div>
+                            <div class="p-8">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-2xl font-bold tracking-tight">FlightFeed.uk</h3>
+                                    <a href="https://flightfeed.uk" target="_blank" class="w-10 h-10 glass flex items-center justify-center rounded-full hover:bg-[#00f2ff] hover:text-black transition-all">
+                                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                                    </a>
+                                </div>
+                                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                                    A specialized platform for finding the best places to fly in England and Wales. Designed for the aviation community with real-time data and location insights.
+                                </p>
+                                <div class="flex flex-wrap gap-2 mb-6">
+                                    <span class="text-[10px] font-bold bg-white/5 px-2 py-1 rounded text-gray-400">ENGLAND</span>
+                                    <span class="text-[10px] font-bold bg-white/5 px-2 py-1 rounded text-gray-400">WALES</span>
+                                    <span class="text-[10px] font-bold bg-[#7000ff]/20 px-2 py-1 rounded text-[#7000ff]">SCOTLAND COMING SOON</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-[#00f2ff] text-xs font-bold uppercase tracking-widest">
+                                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                    Cardiff, Wales
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Placeholder for next project -->
+                        <div class="glass h-full overflow-hidden group relative coming-soon-card flex items-center justify-center reveal-on-scroll delay-200">
+                            <div class="text-center z-10 p-8">
+                                <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                                    <i data-lucide="plus" class="w-8 h-8 text-white/20"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-2 tracking-tight">Your Idea Here</h3>
+                                <p class="text-gray-500 text-sm mb-6">Let's build something useful for the community.</p>
+                                <span class="text-[10px] uppercase tracking-[0.3em] font-black text-[#00f2ff] px-4 py-2 bg-[#00f2ff]/10 rounded-full">Available Slot</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How It Works (The Process) -->
+            <div class="py-32 px-6 bg-gradient-to-b from-transparent to-[#0a0a0a]">
+                <div class="max-w-6xl mx-auto">
+                    <div class="text-center mb-24 reveal-on-scroll">
+                        <h2 class="text-4xl md:text-6xl font-bold mb-6 italic">The <span class="text-[#7000ff]">Workflow</span></h2>
+                        <p class="text-gray-400 max-w-xl mx-auto">This is how I take your concept and turn it into a professional-grade web app.</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-12">
+                        <div class="text-center md:text-left reveal-on-scroll">
+                            <div class="w-12 h-12 rounded-full bg-[#00f2ff] text-black flex items-center justify-center font-bold text-xl mb-8 mx-auto md:mx-0 timeline-dot">1</div>
+                            <h3 class="text-2xl font-bold mb-4">The Pitch</h3>
+                            <p class="text-gray-400 leading-relaxed">You send me your idea. I look for things that help people, look cool in a portfolio, and challenge my skills.</p>
+                        </div>
+                        <div class="text-center md:text-left reveal-on-scroll delay-100">
+                            <div class="w-12 h-12 rounded-full bg-[#7000ff] text-white flex items-center justify-center font-bold text-xl mb-8 mx-auto md:mx-0 timeline-dot">2</div>
+                            <h3 class="text-2xl font-bold mb-4">The Build</h3>
+                            <p class="text-gray-400 leading-relaxed">I get to work coding. You see the progress live as I build the UI and connect the systems.</p>
+                        </div>
+                        <div class="text-center md:text-left reveal-on-scroll delay-200">
+                            <div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center font-bold text-xl mb-8 mx-auto md:mx-0">3</div>
+                            <h3 class="text-2xl font-bold mb-4">The Launch</h3>
+                            <p class="text-gray-400 leading-relaxed">The app goes live on the Nexa network. You get a tool you can use, and I get a project I'm proud of.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="py-32 px-6">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-4xl font-bold mb-16 text-center reveal-on-scroll italic">Common <span class="text-[#00f2ff]">Questions</span></h2>
+                    <div class="space-y-4">
+                        <div class="glass p-8 reveal-on-scroll">
+                            <h4 class="text-xl font-bold mb-4">What do I have to pay?</h4>
+                            <p class="text-gray-400">My development time and hosting on the Nexa network are <span class="text-white font-bold">100% free.</span> The only cost you would ever encounter is if you decide you want a custom domain name (like www.yourname.com). Otherwise, your app lives on a free subdomain like <span class="text-[#00f2ff] font-mono">your-project.nexastudios.co.uk</span>.</p>
+                        </div>
+                        <div class="glass p-8 reveal-on-scroll">
+                            <h4 class="text-xl font-bold mb-4">Why are you doing this for free?</h4>
+                            <p class="text-gray-400">I'm a teen developer looking to build a world-class portfolio. Real projects for real people are better than dummy examples. You get an app, I get experience and a great showcase piece. It's a win-win.</p>
+                        </div>
+                        <div class="glass p-8 reveal-on-scroll">
+                            <h4 class="text-xl font-bold mb-4">Who is Lawson Morris?</h4>
+                            <p class="text-gray-400">That's me. I started Nexa Studios to bridge the gap between "having an idea" and "knowing how to code it." I handle everything from design to servers.</p>
+                        </div>
+                        <div class="glass p-8 reveal-on-scroll">
+                            <h4 class="text-xl font-bold mb-4">Is this for businesses or individuals?</h4>
+                            <p class="text-gray-400">It's for the community. Whether you have a tool idea for your school, a neighborhood project, or just a cool concept that needs to exist, I'm interested.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Expertise Section -->
+        <section id="skills-section" class="section-hidden py-32 px-6">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-24">
+                    <h2 class="text-5xl md:text-7xl font-bold mb-6">Built to <span class="text-[#00f2ff]">Scale.</span></h2>
+                    <p class="text-gray-400 text-xl max-w-2xl mx-auto leading-relaxed">I use the same tools the big tech companies use. Just because I'm young doesn't mean the code isn't professional.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="glass p-12 relative overflow-hidden group">
+                        <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-[#00f2ff]/5 blur-3xl rounded-full transition-all group-hover:bg-[#00f2ff]/10"></div>
+                        <i data-lucide="layers" class="text-[#00f2ff] w-12 h-12 mb-8"></i>
+                        <h3 class="text-3xl font-bold mb-6 italic">Professional Stack</h3>
+                        <p class="text-gray-400 mb-8 leading-relaxed">I build using frameworks that ensure speed and security. I want every project in my portfolio to be a benchmark for quality.</p>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="bg-white/5 border border-white/10 px-4 py-2 rounded-lg text-xs font-mono">React / Next.js</span>
+                            <span class="bg-white/5 border border-white/10 px-4 py-2 rounded-lg text-xs font-mono">Tailwind CSS</span>
+                            <span class="bg-white/5 border border-white/10 px-4 py-2 rounded-lg text-xs font-mono">Firebase</span>
+                            <span class="bg-white/5 border border-white/10 px-4 py-2 rounded-lg text-xs font-mono">TypeScript</span>
+                        </div>
+                    </div>
+
+                    <div class="glass p-12 relative overflow-hidden group">
+                        <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-[#7000ff]/5 blur-3xl rounded-full transition-all group-hover:bg-[#7000ff]/10"></div>
+                        <i data-lucide="zap" class="text-[#7000ff] w-12 h-12 mb-8"></i>
+                        <h3 class="text-3xl font-bold mb-6 italic">My Expertise</h3>
+                        <p class="text-gray-400 mb-8 leading-relaxed">I specialize in clean, responsive UIs and robust logic. I don't stop until the performance is 100/100.</p>
+                        <ul class="space-y-3 text-sm text-gray-500">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#7000ff]"></i> Lightning-fast Interactions</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#7000ff]"></i> Global Accessibility</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[#7000ff]"></i> Secure Data Handling</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section (The Deal) -->
+        <section id="about-section" class="section-hidden min-h-screen py-32 px-6">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-20 items-center">
+                    <div class="space-y-8">
+                        <div class="inline-block bg-[#7000ff]/20 border border-[#7000ff]/30 px-4 py-1 rounded-full text-[#7000ff] text-xs font-bold tracking-widest uppercase">The Story</div>
+                        <h2 class="text-4xl md:text-6xl font-bold">Community-First <br/><span class="text-[#7000ff]">Code.</span></h2>
+                        <p class="text-lg text-gray-400 leading-relaxed">
+                            I'm Lawson Morris, a teen developer from the UK. I started Nexa Studios because I wanted to build real things for real people while I learn.
+                        </p>
+                        <p class="text-lg text-gray-400 leading-relaxed">
+                            I don't charge money for my development or hosting because I'm building my career portfolio. You get a professional address like <span class="text-white">your-project.lawsonmorris.co.uk</span> for free.
+                        </p>
+                        <div class="grid grid-cols-2 gap-6 pt-6">
+                            <div class="glass p-6 group hover:border-[#00f2ff]/50 transition-colors">
+                                <i data-lucide="user" class="text-[#00f2ff] mb-4"></i>
+                                <h4 class="font-bold mb-2">Lawson Morris</h4>
+                                <p class="text-sm text-gray-500">Teen dev & founder. I handle 100% of the build.</p>
+                            </div>
+                            <div class="glass p-6 group hover:border-[#7000ff]/50 transition-colors">
+                                <i data-lucide="globe" class="text-[#7000ff] mb-4"></i>
+                                <h4 class="font-bold mb-2">Free Hosting</h4>
+                                <p class="text-sm text-gray-500">Free subdomains included for every project.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="glass aspect-square rounded-3xl overflow-hidden flex items-center justify-center p-10">
+                            <div class="w-full h-full relative">
+                                <div class="absolute inset-0 bg-gradient-to-br from-[#00f2ff]/20 to-[#7000ff]/20 rounded-full blur-3xl animate-pulse"></div>
+                                <i data-lucide="terminal" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 text-white/40 floating"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Submit Section -->
+        <section id="submit-section" class="section-hidden min-h-screen py-32 px-6">
+            <div class="max-w-4xl mx-auto text-center mb-16">
+                <div class="text-[#00f2ff] font-bold tracking-[0.3em] uppercase text-xs mb-4">Your Turn</div>
+                <h2 class="text-4xl md:text-6xl font-bold mb-4">Get it Built <span class="badge-free italic">Now</span></h2>
+                <p class="text-gray-400">Ready to help me build my portfolio? Let's talk about your idea.</p>
+            </div>
+            
+            <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+                <div class="glass p-10 flex flex-col items-center text-center group hover:border-[#00f2ff]/50 transition-all">
+                    <div class="w-20 h-20 bg-[#00f2ff]/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="facebook" class="w-10 h-10 text-[#00f2ff]"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Facebook DM</h3>
+                    <p class="text-gray-500 mb-8">Send me a quick message. I'm active on the Nexa page and love chatting about tech.</p>
+                    <a href="https://www.facebook.com/profile.php?id=61575736710038" target="_blank" class="w-full btn-glow bg-[#00f2ff] text-black font-bold py-4 rounded-xl">
+                        Message Lawson
+                    </a>
+                </div>
+
+                <div class="glass p-10 flex flex-col items-center text-center group hover:border-[#7000ff]/50 transition-all">
+                    <div class="w-20 h-20 bg-[#7000ff]/10 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="mail" class="w-10 h-10 text-[#7000ff]"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Direct Email</h3>
+                    <p class="text-gray-500 mb-8">Send over a full breakdown of your idea or any sketches you have to my official inbox.</p>
+                    <a href="mailto:nexa@lawsonmorris.co.uk?subject=Nexa%20Project%20Idea%20Submission" class="w-full btn-glow bg-[#7000ff] text-white font-bold py-4 rounded-xl">
+                        Send Email
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact-section" class="section-hidden min-h-screen py-32 px-6">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex flex-col md:flex-row gap-16 items-center">
+                    <div class="md:w-1/2 space-y-8">
+                        <h2 class="text-5xl md:text-7xl font-bold leading-tight">Drop a <span class="text-[#00f2ff]">Line.</span></h2>
+                        <p class="text-xl text-gray-400 max-w-md">Questions about the tech? Want to partner up? Just send me an email.</p>
+                        
+                        <div class="space-y-6 text-gray-400">
+                             <div class="flex items-center gap-6 group cursor-pointer" onclick="window.location.href='mailto:nexa@lawsonmorris.co.uk'">
+                                <div class="w-14 h-14 rounded-2xl glass flex items-center justify-center group-hover:border-[#00f2ff] transition-all">
+                                    <i data-lucide="mail" class="w-6 h-6 text-[#00f2ff]"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest mb-1">Email</p>
+                                    <p class="text-xl font-medium group-hover:text-[#00f2ff] transition-colors">nexa@lawsonmorris.co.uk</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-1/2 w-full">
+                        <div class="glass p-12 text-center">
+                            <i data-lucide="sparkles" class="w-16 h-16 text-[#00f2ff] mx-auto mb-8 floating"></i>
+                            <h3 class="text-3xl font-bold mb-6 italic">Built for the People.</h3>
+                            <p class="text-gray-400 mb-10 text-lg leading-relaxed">I'm dedicated to building high-impact tools that actually get used. Let's make it happen.</p>
+                            <a href="mailto:nexa@lawsonmorris.co.uk" class="btn-glow bg-gradient-to-r from-[#00f2ff] to-[#7000ff] text-white font-bold py-5 px-12 rounded-2xl text-xl w-full">
+                                Say Hello
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-20 px-6 border-t border-white/5 relative z-10 bg-black">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+            <div class="nav-logo text-3xl font-bold cursor-pointer" onclick="navigateTo('home')">
+                NEXA<span class="text-[#00f2ff]">STUDIOS</span>
+            </div>
+            <div class="flex gap-8 text-gray-500 text-sm uppercase tracking-widest font-bold">
+                <span onclick="navigateTo('home')" class="hover:text-white cursor-pointer transition-colors">Home</span>
+                <span onclick="navigateTo('skills')" class="hover:text-white cursor-pointer transition-colors">The Tech</span>
+                <span onclick="navigateTo('about')" class="hover:text-white cursor-pointer transition-colors">About Me</span>
+                <span onclick="navigateTo('submit')" class="hover:text-white cursor-pointer transition-colors">Submit</span>
+            </div>
+            <div class="flex gap-6">
+                <a href="mailto:nexa@lawsonmorris.co.uk" class="w-12 h-12 glass flex items-center justify-center rounded-full hover:bg-[#00f2ff] hover:text-black transition-all">
+                    <i data-lucide="mail" class="w-5 h-5"></i>
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=61575736710038" target="_blank" class="w-12 h-12 glass flex items-center justify-center rounded-full hover:bg-[#00f2ff] hover:text-black transition-all">
+                    <i data-lucide="facebook" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+        <div class="max-w-6xl mx-auto mt-20 pt-10 border-t border-white/5 text-center text-gray-600 text-[10px] tracking-[0.3em]">
+            <p>© 2026 NEXA STUDIOS • A LAWSON MORRIS PORTFOLIO PROJECT • ALL RIGHTS RESERVED</p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, observerOptions);
+
+        function setupObservers() { document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el)); }
+
+        function navigateTo(sectionId) {
+            document.getElementById('mobile-overlay').classList.add('section-hidden');
+            const sections = ['home', 'about', 'submit', 'contact', 'skills'];
+            sections.forEach(s => {
+                const el = document.getElementById(`${s}-section`);
+                if (el) { el.classList.add('section-hidden'); el.classList.remove('animate-fade-up'); }
+            });
+            const target = document.getElementById(`${sectionId}-section`);
+            if (target) {
+                target.classList.remove('section-hidden');
+                setTimeout(() => { target.classList.add('animate-fade-up'); setupObservers(); }, 10);
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('main-nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('py-4', 'bg-black/80');
+                nav.classList.remove('py-6', 'bg-transparent');
+            } else {
+                nav.classList.remove('py-4', 'bg-black/80');
+                nav.classList.add('py-6', 'bg-transparent');
+            }
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("scroll-progress").style.width = scrolled + "%";
+        });
+
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => { document.getElementById('mobile-overlay').classList.remove('section-hidden'); });
+        document.getElementById('mobile-close-btn').addEventListener('click', () => { document.getElementById('mobile-overlay').classList.add('section-hidden'); });
+
+        // Particles
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.4 + 0.1;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width || this.x < 0 || this.y > canvas.height || this.y < 0) this.reset();
+            }
+            draw() { ctx.fillStyle = `rgba(0, 242, 255, ${this.opacity})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
+        }
+
+        for (let i = 0; i < 60; i++) particles.push(new Particle());
+        function drawNexus() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x; const dy = particles[i].y - particles[j].y; const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 180) {
+                        ctx.strokeStyle = `rgba(0, 242, 255, ${0.1 * (1 - dist/180)})`; ctx.lineWidth = 0.5;
+                        ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            drawNexus();
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.onload = () => { animateParticles(); navigateTo('home'); setupObservers(); };
+    </script>
+</body>
+</html>
