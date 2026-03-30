@@ -194,6 +194,17 @@
         .glass:hover .project-image-hover {
             transform: scale(1.05);
         }
+
+        /* Cookie Banner Animations */
+        #cookie-banner {
+            transform: translateY(100%);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        #cookie-banner.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -574,6 +585,29 @@
         </div>
     </footer>
 
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" class="fixed bottom-6 left-6 right-6 md:left-auto md:right-8 md:w-[420px] z-[2000] p-6 glass border-[#00f2ff]/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-[#00f2ff]/10 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="cookie" class="text-[#00f2ff] w-6 h-6"></i>
+            </div>
+            <div class="flex-1">
+                <h4 class="text-white font-bold mb-1 tracking-tight">Cookies in the Nexa</h4>
+                <p class="text-xs text-gray-400 leading-relaxed mb-4">
+                    I use basic cookies to ensure the best experience and to understand how you interact with Nexa Studios. No data is sold, obviously.
+                </p>
+                <div class="flex items-center gap-3">
+                    <button onclick="acceptCookies()" class="flex-1 bg-[#00f2ff] text-black text-xs font-black uppercase py-2.5 rounded-lg hover:brightness-110 transition-all">
+                        Accept All
+                    </button>
+                    <button onclick="closeCookies()" class="px-4 py-2.5 bg-white/5 border border-white/10 text-white text-[10px] font-bold uppercase rounded-lg hover:bg-white/10 transition-all">
+                        Necessary Only
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         lucide.createIcons();
 
@@ -662,7 +696,31 @@
             requestAnimationFrame(animateParticles);
         }
 
-        window.onload = () => { animateParticles(); navigateTo('home'); setupObservers(); };
+        // Cookie Logic
+        function checkCookieConsent() {
+            const consent = localStorage.getItem('nexa-cookie-consent');
+            if (!consent) {
+                setTimeout(() => {
+                    document.getElementById('cookie-banner').classList.add('show');
+                }, 2000);
+            }
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('nexa-cookie-consent', 'accepted');
+            closeCookies();
+        }
+
+        function closeCookies() {
+            document.getElementById('cookie-banner').classList.remove('show');
+        }
+
+        window.onload = () => { 
+            animateParticles(); 
+            navigateTo('home'); 
+            setupObservers(); 
+            checkCookieConsent();
+        };
     </script>
 </body>
 </html>
